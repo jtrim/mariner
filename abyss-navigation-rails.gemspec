@@ -2,10 +2,10 @@
 require File.expand_path('../lib/abyss/navigation/version', __FILE__)
 
 Gem::Specification.new do |gem|
-  gem.authors       = ["Jesse Trimble"]
-  gem.email         = ["jlowelltrim@gmail.com"]
-  gem.description   = %q{TODO: Write a gem description}
-  gem.summary       = %q{TODO: Write a gem summary}
+  gem.authors       = ["Jesse Trimble", "Adam Albrecht"]
+  gem.email         = ["jlowelltrim@gmail.com", "adam.albrecht@gmail.com"]
+  gem.description   = %q{A DSL for creating navigation structures based on the Rails routing table using Abyss.}
+  gem.summary       = %q{A DSL for creating navigation structures based on the Rails routing table using Abyss.}
   gem.homepage      = ""
 
   gem.add_dependency 'abyss', '~> 0.0.1'
