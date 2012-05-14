@@ -7,6 +7,7 @@ module Abyss
     describe ".configure" do
 
       before { Navigation.configuration = nil }
+      after  { Navigation.configuration = nil }
 
       it 'is shorthand for the Navigation Config API' do
         expected_block = Proc.new { }
