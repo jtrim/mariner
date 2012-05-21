@@ -62,7 +62,7 @@ module Abyss
 
       describe "#render" do
 
-        describe "integration-y tests" do
+        describe "integration-y behaviors" do
 
           before { Url.any_instance.stub(:render).and_return("foo") }
 
@@ -77,10 +77,10 @@ module Abyss
           end
 
           it "recursively renders groups and items properly" do
-            r  = "<ul.*>" # nonexistent_group
+            r  = "<ul[^>]*>" # nonexistent_group
               r << "<li>foo</li>" # nonexistent_thing
               r << "<li>"
-                r << "<ul.*>" # sub_nonexistent_thing
+                r << "<ul[^>]*>" # sub_nonexistent_thing
                   r << "<li>foo</li>" # deep_nonexistent_thing
                 r << "</ul>"
               r << "</li>"
@@ -94,6 +94,23 @@ module Abyss
             end
 
             subject.render.should =~ Regexp.new(r)
+          end
+
+          context "when rendering titles" do
+
+            it "includes a title list item" do
+              r  = "<ul.*>" # nonexistent_group
+                r << "<li>Nonexistent Group</li>" # group title
+                r << "<li>foo</li>" # nonexistent_thing
+              r << "</ul>"
+
+              subject.nonexistent_group do
+                nonexistent_thing "foo"
+              end
+
+              subject.render(include_title: true).should =~ Regexp.new(r)
+            end
+
           end
 
         end
