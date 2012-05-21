@@ -27,10 +27,17 @@ module Abyss
         result = ""
 
         result << open_surround
-        result << "#{item_open_surround}#{self.name.to_s.titleize}#{item_close_surround}" if opts[:include_title] && !name.nil?
+        result << "#{item_open_surround}#{self.name.to_s.titleize}#{item_close_surround}" if include_title?(opts)
         result << "#{rendered_configurations}#{close_surround}"
 
         result
+      end
+
+      private
+
+      def include_title?(opts)
+        !name.nil? && opts[:include_title] == true || \
+          (opts[:include_title].is_a?(Regexp) && name.to_s.titleize =~ opts[:include_title])
       end
 
     end

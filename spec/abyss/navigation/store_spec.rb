@@ -96,7 +96,7 @@ module Abyss
             subject.render.should =~ Regexp.new(r)
           end
 
-          context "when rendering titles" do
+          context "when rendering all titles" do
 
             it "includes a title list item" do
               r  = "<ul.*>" # nonexistent_group
@@ -109,6 +109,23 @@ module Abyss
               end
 
               subject.render(include_title: true).should =~ Regexp.new(r)
+            end
+
+          end
+
+          context "when rendering specific titles" do
+
+            it "includes a title list item" do
+              subject.nonexistent_group do
+                sub_nonexistent_thing do
+                  deep_nonexistent_thing "bar!!!"
+                end
+              end
+
+              result = subject.render(include_title: /sub nonexistent thing/i)
+
+              result.should_not =~ /nonexistent group/i
+              result.should     =~ /sub nonexistent thing/i
             end
 
           end
