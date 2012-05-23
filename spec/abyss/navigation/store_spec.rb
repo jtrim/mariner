@@ -38,7 +38,7 @@ module Abyss
       describe "#group" do
 
         it "forwards the group on to method_missing" do
-          expected_block = -> {}
+          expected_block = proc {}
           subject.should_receive(:method_missing).with(:foo, [], &expected_block).and_return stub.as_null_object
           subject.group(:foo) &expected_block
         end
@@ -59,8 +59,8 @@ module Abyss
 
           it "stores a new Url with a method_name, title, and link_options" do
             url_stub = stub
-            Url.should_receive(:new).with(:some_undefined_method, 'A Title', { option: 'value' }).and_return(url_stub)
-            subject.assign(:some_undefined_method, ['A Title', { option: 'value' }])
+            Url.should_receive(:new).with(:some_undefined_method, 'A Title', { :option => 'value' }).and_return(url_stub)
+            subject.assign(:some_undefined_method, ['A Title', { :option => 'value' }])
             subject.configurations[:some_undefined_method].should == url_stub
           end
 

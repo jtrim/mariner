@@ -10,7 +10,7 @@ module Abyss
 
         describe "option_assignment" do
 
-          subject { UnorderedListRenderer.new(render_titles: "PHONE") }
+          subject { UnorderedListRenderer.new(:render_titles => "PHONE") }
 
           its(:render_titles) { should == "PHONE" }
 
@@ -68,27 +68,27 @@ module Abyss
           let(:url) { Url.new(:root_path, "Title", {}) }
 
           it 'returns the correct attributes' do
-            subject.render_options.should == { href: "/", class: "root_path" }
+            subject.render_options.should == { :href => "/", :class => "root_path" }
           end
 
         end
 
         context 'when an additional class is specified' do
 
-          let(:url) { Url.new(:root_path, "Title", {class: 'additional'}) }
+          let(:url) { Url.new(:root_path, "Title", {:class => 'additional'}) }
 
           it 'returns the correct attributes' do
-            subject.render_options.should == { href: "/", class: "additional root_path" }
+            subject.render_options.should == { :href => "/", :class => "additional root_path" }
           end
 
         end
 
         context 'when an additional options are specified' do
 
-          let(:url) { Url.new(:root_path, "Title", {placeholder: 'foo'}) }
+          let(:url) { Url.new(:root_path, "Title", {:placeholder => 'foo'}) }
 
           it 'returns the correct attributes' do
-            subject.render_options.should == { href: "/", class: "root_path", placeholder: 'foo' }
+            subject.render_options.should == { :href => "/", :class => "root_path", :placeholder => 'foo' }
           end
 
         end

@@ -6,13 +6,13 @@ module Abyss
 
     describe Url do
 
-      subject { Url.new(:foo_path, "Thing", {option: 'bar'}) }
+      subject { Url.new(:foo_path, "Thing", {:option => 'bar'}) }
 
       describe "#initialize" do
 
         its(:name)         { should == :foo_path }
         its(:title)        { should == "Thing" }
-        its(:options)      { should == {option: 'bar'} }
+        its(:options)      { should == {:option => 'bar'} }
 
       end
 

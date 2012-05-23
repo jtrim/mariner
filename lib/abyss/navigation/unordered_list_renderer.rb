@@ -23,7 +23,7 @@ module Abyss
       private
 
       def defaults
-        { render_titles: false }
+        { :render_titles => false }
       end
 
       public
@@ -42,8 +42,8 @@ module Abyss
         end
 
         def render_options
-          opts = { href: subject.href, class: subject.name.to_s }
-          opts.merge(class: renderer.item_classname, &merge_proc).merge(subject.options, &merge_proc)
+          opts = { :href => subject.href, :class => subject.name.to_s }
+          opts.merge(:class => renderer.item_classname, &merge_proc).merge(subject.options, &merge_proc)
         end
 
         private

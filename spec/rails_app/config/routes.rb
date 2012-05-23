@@ -5,5 +5,5 @@ RailsApp::Application.routes.draw do
   match '/normal' => 'application#normal'
   match '/condensed' => 'application#condensed'
 
-  root to: 'application#normal'
+  root :to => 'application#normal'
 end

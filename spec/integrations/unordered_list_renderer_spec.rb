@@ -23,7 +23,7 @@ module Abyss
 
       # Work within the context of an anonymous controller
       #
-      describe Class.new(ActionController::Base), type: :controller do
+      describe Class.new(ActionController::Base), :type => :controller do
 
         subject { get :index; response.body }
 
@@ -32,13 +32,13 @@ module Abyss
           controller do
             def index
               render_options = {
-                render_titles: true,
-                group_classname: 'nav-list',
-                title_classname: 'nav-title',
-                item_classname: 'nav-item'
+                :render_titles => true,
+                :group_classname => 'nav-list',
+                :title_classname => 'nav-title',
+                :item_classname => 'nav-item'
               }
               strategy = UnorderedListRenderer.new(render_options)
-              render text: Abyss::Navigation.configuration.render(strategy)
+              render :text => Abyss::Navigation.configuration.render(strategy)
             end
           end
 
@@ -55,14 +55,14 @@ module Abyss
 
             controller do
               def index
-                strategy = UnorderedListRenderer.new(render_titles: false)
-                render text: Abyss::Navigation.configuration.render(strategy)
+                strategy = UnorderedListRenderer.new(:render_titles => false)
+                render :text => Abyss::Navigation.configuration.render(strategy)
               end
             end
 
             it "suppresses titles" do
-              subject.should_not have_css 'ul li:first-child', text: 'Quick Links'
-              subject.should have_css 'ul li:last-child a[href="/"]', text: 'Home'
+              subject.should_not have_css 'ul li:first-child', :text => 'Quick Links'
+              subject.should have_css 'ul li:last-child a[href="/"]', :text => 'Home'
             end
 
           end
@@ -71,14 +71,14 @@ module Abyss
 
             controller do
               def index
-                strategy = UnorderedListRenderer.new(render_titles: true)
-                render text: Abyss::Navigation.configuration.render(strategy)
+                strategy = UnorderedListRenderer.new(:render_titles => true)
+                render :text => Abyss::Navigation.configuration.render(strategy)
               end
             end
 
             it "suppresses titles" do
-              subject.should have_css 'ul li:first-child', text: 'Quick Links'
-              subject.should have_css 'ul li:last-child a[href="/"]', text: 'Home'
+              subject.should have_css 'ul li:first-child', :text => 'Quick Links'
+              subject.should have_css 'ul li:last-child a[href="/"]', :text => 'Home'
             end
 
           end
