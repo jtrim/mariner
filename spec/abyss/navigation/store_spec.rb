@@ -4,26 +4,53 @@ module Abyss
 
   module Navigation
 
-    describe ".configure" do
-
-      before { Navigation.configuration = nil }
-      after  { Navigation.configuration = nil }
-
-      it 'is shorthand for the Navigation Config API' do
-        expected_block = Proc.new { }
-        fake_config = mock()
-        Store.stub(:new).and_return(fake_config)
-        fake_config.should_receive(:instance_eval).with(&expected_block)
-
-        Navigation.configure &expected_block
-      end
-
-    end
-
     describe Store do
 
       it "is a subclass of DeepStore" do
         subject.should be_a ::Abyss::DeepStore
+      end
+
+      describe "#virtual?" do
+
+        it "aliases the attribute reader" do
+          subject.method(:virtual).should == subject.method(:virtual?)
+        end
+
+      end
+
+      describe "#initialize" do
+
+        subject { Store.new }
+
+        its(:virtual?) { should be_false }
+
+      end
+
+      describe "#defaults" do
+
+        it "evaluates the block against its class" do
+          Store.should_receive(:foo)
+          subject.defaults { foo }
+        end
+
+      end
+
+      describe "#group" do
+
+        it "forwards the group on to method_missing" do
+          expected_block = -> {}
+          subject.should_receive(:method_missing).with(:foo, [], &expected_block).and_return stub.as_null_object
+          subject.group(:foo) &expected_block
+        end
+
+        it "sets #virtual of the newly created group to true" do
+          subject.tap {} # force evaluation since we stub new
+          store_mock = mock
+          store_mock.should_receive(:virtual=).with(true)
+          Store.stub(:new).and_return store_mock
+          subject.group(:foo) {}
+        end
+
       end
 
       describe "#assign" do
@@ -35,15 +62,6 @@ module Abyss
             Url.should_receive(:new).with(:some_undefined_method, 'A Title', { option: 'value' }).and_return(url_stub)
             subject.assign(:some_undefined_method, ['A Title', { option: 'value' }])
             subject.configurations[:some_undefined_method].should == url_stub
-          end
-
-        end
-
-        context "without link options" do
-
-          it "stores a new Url with an empty hash of link options" do
-            Url.should_receive(:new).with(:some_undefined_method, 'A Title', {})
-            subject.assign(:some_undefined_method, ['A Title'])
           end
 
         end
@@ -62,74 +80,25 @@ module Abyss
 
       describe "#render" do
 
-        describe "integration-y behaviors" do
+        let(:renderer_stub) { stub }
 
-          before { Url.any_instance.stub(:render).and_return("foo") }
+        context "by default" do
 
-          it "renders an empty group properly" do
-            subject.nonexistent_group {}
-            subject.render.should =~ /<ul.*><\/ul>/
+          it "uses a default rendering strategy" do
+            UnorderedListRenderer.any_instance.stub(:factory).with(:group, subject).and_return(renderer_stub)
+
+            renderer_stub.should_receive(:render)
+            subject.render
           end
 
-          it "renders an item properly" do
-            subject.nonexistent_thing 'foo'
-            subject.render.should =~ /foo/
-          end
+        end
 
-          it "recursively renders groups and items properly" do
-            r  = "<ul[^>]*>" # nonexistent_group
-              r << "<li>foo</li>" # nonexistent_thing
-              r << "<li>"
-                r << "<ul[^>]*>" # sub_nonexistent_thing
-                  r << "<li>foo</li>" # deep_nonexistent_thing
-                r << "</ul>"
-              r << "</li>"
-            r << "</ul>"
+        it "renders through a specified strategy when given" do
+          class FakeRenderingStrategy; end
+          FakeRenderingStrategy.any_instance.stub(:factory).with(:group, subject).and_return(renderer_stub)
 
-            subject.nonexistent_group do
-              nonexistent_thing "foo"
-              sub_nonexistent_thing do
-                deep_nonexistent_thing "bar!!!"
-              end
-            end
-
-            subject.render.should =~ Regexp.new(r)
-          end
-
-          context "when rendering all titles" do
-
-            it "includes a title list item" do
-              r  = "<ul.*>" # nonexistent_group
-                r << "<li>Nonexistent Group</li>" # group title
-                r << "<li>foo</li>" # nonexistent_thing
-              r << "</ul>"
-
-              subject.nonexistent_group do
-                nonexistent_thing "foo"
-              end
-
-              subject.render(include_title: true).should =~ Regexp.new(r)
-            end
-
-          end
-
-          context "when rendering specific titles" do
-
-            it "includes a title list item" do
-              subject.nonexistent_group do
-                sub_nonexistent_thing do
-                  deep_nonexistent_thing "bar!!!"
-                end
-              end
-
-              result = subject.render(include_title: /sub nonexistent thing/i)
-
-              result.should_not =~ /nonexistent group/i
-              result.should     =~ /sub nonexistent thing/i
-            end
-
-          end
-
+          renderer_stub.should_receive(:render)
+          subject.render(FakeRenderingStrategy.new)
         end
 
       end

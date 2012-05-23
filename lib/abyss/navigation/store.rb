@@ -6,6 +6,16 @@ module Abyss
 
     class Store < ::Abyss::DeepStore
 
+      attr_accessor :virtual
+      alias :virtual? :virtual
+
+      def initialize(*)
+        @virtual = false
+        super
+      end
+
+      # ABSTRACT METHOD OVERRIDE
+      #
       def assign(method_name, values)
         raise ArgumentError, "Wrong number of values specified (#{values.size} for <= 2)" if values.size > 2
 
@@ -14,30 +24,21 @@ module Abyss
         self.configurations[method_name] = Url.new(method_name, title, options)
       end
 
-      def render(opts={})
-        open_surround = close_surround = item_open_surround = item_close_surround = ""
-
-        open_surround = "<ul class='navigation-group #{self.name}'>"
-        close_surround = "</ul>"
-        item_open_surround = "<li>"
-        item_close_surround = "</li>"
-
-        rendered_configurations = configurations.map { |config| name, entity = config; "#{item_open_surround}#{entity.render(opts)}#{item_close_surround}" }.join
-
-        result = ""
-
-        result << open_surround
-        result << "#{item_open_surround}#{self.name.to_s.titleize}#{item_close_surround}" if include_title?(opts)
-        result << "#{rendered_configurations}#{close_surround}"
-
-        result
+      def defaults(&block)
+        self.class.instance_eval &block
       end
 
-      private
+      # Considering removing this api. Doesn't seem to be a clear
+      # need for declaring a group as virtual since the mass refactor
+      # has moved all presentation logic into the Rendering strategy.
+      #
+      def group(*args, &block)
+        group = send(args.shift, args, &block)
+        group.virtual = true
+      end
 
-      def include_title?(opts)
-        !name.nil? && opts[:include_title] == true || \
-          (opts[:include_title].is_a?(Regexp) && name.to_s.titleize =~ opts[:include_title])
+      def render(rendering_strategy=UnorderedListRenderer.new)
+        rendering_strategy.factory(:group, self).render
       end
 
     end

@@ -4,6 +4,7 @@ require 'abyss'
 
 require 'navigation/version'
 require 'navigation/errors'
+require 'navigation/unordered_list_renderer'
 require 'navigation/url'
 require 'navigation/store'
 
@@ -21,7 +22,7 @@ module Abyss
     # See NavigationConfig for examples.
     #
     def self.configure(&block)
-      self.configuration ||= Store.new
+      self.configuration ||= Store.new.tap { |s| s.virtual = true }
       self.configuration.instance_eval &block
     end
 

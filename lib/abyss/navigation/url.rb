@@ -4,19 +4,15 @@ module Abyss
 
     class Url
 
-      include ActionView::Helpers::TagHelper
+      attr_accessor :name, :title, :options
 
-      attr_accessor :name, :title, :link_options
-
-      def initialize(name, title, link_options={})
-        @name, @title, @link_options = name, title, link_options
+      def initialize(name, title, options={})
+        @name, @title, @options = name, title, options
       end
 
-      def render(*)
-        content_tag :a, title, render_options
+      def render(rendering_strategy=UnorderedListRenderer.new)
+        rendering_strategy.factory(:item, self).render
       end
-
-      private
 
       def href
         begin
@@ -28,17 +24,6 @@ module Abyss
           send(name)
         rescue NoMethodError => e
           raise ::Abyss::Errors::InvalidUrlHelperMethod.new(name)
-        end
-      end
-
-      def render_options
-        opts = { href: href, class: name }
-        opts.merge(link_options) do |key, oldval, newval|
-          case key.to_s
-          when "class"
-            (oldval.to_s.split(" ") + newval.to_s.split(" ")).sort.join(" ")
-          else newval
-          end
         end
       end
 

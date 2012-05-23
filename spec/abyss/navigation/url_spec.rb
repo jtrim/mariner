@@ -6,45 +6,37 @@ module Abyss
 
     describe Url do
 
-      describe "#initialize" do
+      subject { Url.new(:foo_path, "Thing", {option: 'bar'}) }
 
-        subject { Url.new(:foo_path, "Thing", {option: 'bar'}) }
+      describe "#initialize" do
 
         its(:name)         { should == :foo_path }
         its(:title)        { should == "Thing" }
-        its(:link_options) { should == {option: 'bar'} }
+        its(:options)      { should == {option: 'bar'} }
 
       end
 
       describe "#render" do
 
-        subject { Url.new(:foo_path, "Thing", {class: "a-link"}) }
+        let(:renderer_stub) { stub }
 
-        it "renders a link properly" do
-          # Here we're making an assumption that through some mechanism outside
-          # the concern of this test, Url will know about the path's it's being
-          # asked to know about. The currently planned way is to include
-          # Rails.application.routes.url_helpers in an initializer, but this
-          # is subject to change.
-          #
-          subject.stub(:foo_path).and_return('/foo/bar.baz')
+        context "by default" do
 
-          rendered = subject.render
-          rendered.should =~ /<a.*>Thing<\/a>/ # content
-          rendered.should =~ /href=['"]\/foo\/bar.baz['"]/ # path
-          rendered.should =~ /class=['"]a-link foo_path['"]/
-        end
+          it "uses a default rendering strategy" do
+            UnorderedListRenderer.any_instance.stub(:factory).with(:item, subject).and_return(renderer_stub)
 
-        context "when trying to use a link that is undefined" do
-
-          subject { Url.new(:undefined_path, "Undefined", {option: 'bar'}) }
-
-          it "raises an error" do
-            expect {
-              subject.render
-            }.to raise_error ::Abyss::Errors::InvalidUrlHelperMethod, /Unknown url helper method.*undefined_path/
+            renderer_stub.should_receive(:render)
+            subject.render
           end
 
+        end
+
+        it "renders through a specified strategy when given" do
+          class FakeRenderingStrategy; end
+          FakeRenderingStrategy.any_instance.stub(:factory).with(:item, subject).and_return(renderer_stub)
+
+          renderer_stub.should_receive(:render)
+          subject.render(FakeRenderingStrategy.new)
         end
 
       end
