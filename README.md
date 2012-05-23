@@ -1,4 +1,6 @@
-# Abyss::Navigation::Rails
+# abyss-navigation-rails
+
+[![Build Status](https://secure.travis-ci.org/jtrim/abyss-navigation-rails.png)](http://travis-ci.org/jtrim/abyss-navigation-rails)
 
 TODO: Write a gem description
 
