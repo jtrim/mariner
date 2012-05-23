@@ -8,7 +8,7 @@ Gem::Specification.new do |gem|
   gem.summary       = %q{A DSL for creating navigation structures based on the Rails routing table using Abyss.}
   gem.homepage      = ""
 
-  gem.add_dependency 'abyss', '~> 0.1'
+  gem.add_dependency 'abyss'
   gem.add_dependency 'rails', '~> 3.2.0'
 
   gem.files         = `git ls-files`.split($\)
