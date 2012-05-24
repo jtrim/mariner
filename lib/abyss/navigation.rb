@@ -4,6 +4,7 @@ require 'abyss'
 
 require 'navigation/version'
 require 'navigation/errors'
+require 'navigation/renderer/base'
 require 'navigation/unordered_list_renderer'
 require 'navigation/url'
 require 'navigation/store'

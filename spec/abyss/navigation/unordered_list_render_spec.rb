@@ -42,18 +42,6 @@ module Abyss
 
     describe UnorderedListRenderer::ItemRenderer do
 
-      describe "#initialize" do
-
-        let(:fake_renderer) { stub(UnorderedListRenderer) }
-        let(:fake_entity)   { stub }
-
-        subject { UnorderedListRenderer::ItemRenderer.new(fake_entity, fake_renderer) }
-
-        its(:subject)  { should == fake_entity }
-        its(:renderer) { should == fake_renderer }
-
-      end
-
       # Method #render is not tested here. See
       # spec/integrations/unordered_list_renderer_spec
 
@@ -98,18 +86,6 @@ module Abyss
     end
 
     describe UnorderedListRenderer::GroupRenderer do
-
-      describe "#initialize" do
-
-        let(:fake_renderer) { stub(UnorderedListRenderer) }
-        let(:fake_entity)   { stub }
-
-        subject { UnorderedListRenderer::GroupRenderer.new(fake_entity, fake_renderer) }
-
-        its(:subject)  { should == fake_entity }
-        its(:renderer) { should == fake_renderer }
-
-      end
 
       # Method #render is not tested here. See
       # spec/integrations/unordered_list_renderer_spec

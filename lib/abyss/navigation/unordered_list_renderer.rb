@@ -28,14 +28,8 @@ module Abyss
 
       public
 
-      class ItemRenderer
+      class ItemRenderer < Renderer::Base
         include ActionView::Helpers::TagHelper
-
-        attr_accessor :subject, :renderer
-
-        def initialize(subject, renderer)
-          @subject, @renderer = subject, renderer
-        end
 
         def render
           content_tag :a, subject.title, render_options
@@ -43,7 +37,7 @@ module Abyss
 
         def render_options
           opts = { :href => subject.href, :class => subject.name.to_s }
-          opts.merge(:class => renderer.item_classname, &merge_proc).merge(subject.options, &merge_proc)
+          opts.merge(:class => rendering_strategy.item_classname, &merge_proc).merge(subject.options, &merge_proc)
         end
 
         private
@@ -60,18 +54,12 @@ module Abyss
 
       end
 
-      class GroupRenderer
-
-        attr_accessor :subject, :renderer
-
-        def initialize(subject, renderer)
-          @subject, @renderer = subject, renderer
-        end
+      class GroupRenderer < Renderer::Base
 
         def render
           open_surround = close_surround = item_open_surround = item_close_surround = ""
 
-          open_surround = "<ul class='#{renderer.group_classname}'>"
+          open_surround = "<ul class='#{rendering_strategy.group_classname}'>"
           close_surround = "</ul>"
 
           item_open_surround = "<li>"
@@ -80,9 +68,9 @@ module Abyss
           rendered_configurations = subject.configurations.map do |config|
             name, entity = config
             unless subject.virtual?
-              "#{item_open_surround}#{entity.render(renderer)}#{item_close_surround}"
+              "#{item_open_surround}#{entity.render(rendering_strategy)}#{item_close_surround}"
             else
-              entity.render(renderer)
+              entity.render(rendering_strategy)
             end
           end.join
 
@@ -90,8 +78,8 @@ module Abyss
             result = ""
             result << open_surround
 
-            if renderer.render_titles?
-              result << "<li class='#{renderer.title_classname}'>#{subject.name.to_s.titleize}#{item_close_surround}"
+            if rendering_strategy.render_titles?
+              result << "<li class='#{rendering_strategy.title_classname}'>#{subject.name.to_s.titleize}#{item_close_surround}"
             end
 
             result << "#{rendered_configurations}#{close_surround}"
