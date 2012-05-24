@@ -1,4 +1,4 @@
-module Abyss
+module Mariner
 
   module Errors
 

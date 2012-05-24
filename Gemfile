@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-# Specify your gem's dependencies in abyss-navigation-rails.gemspec
+# Specify your gem's dependencies in mariner.gemspec
 gemspec
 
 group :test do

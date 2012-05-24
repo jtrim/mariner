@@ -1,6 +1,6 @@
-# abyss-navigation-rails
+# Mariner
 
-[![Build Status](https://secure.travis-ci.org/jtrim/abyss-navigation-rails.png)](http://travis-ci.org/jtrim/abyss-navigation-rails)
+[![Build Status](https://secure.travis-ci.org/jtrim/mariner.png)](http://travis-ci.org/jtrim/mariner)
 
 TODO: Write a gem description
 
@@ -8,7 +8,7 @@ TODO: Write a gem description
 
 Add this line to your application's Gemfile:
 
-    gem 'abyss-navigation-rails'
+    gem 'mariner'
 
 And then execute:
 
@@ -16,7 +16,7 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install abyss-navigation-rails
+    $ gem install mariner
 
 ## Usage
 

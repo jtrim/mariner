@@ -5,7 +5,7 @@ require "action_mailer/railtie"
 require "active_resource/railtie"
 require "sprockets/railtie"
 
-require 'abyss-navigation-rails'
+require "mariner"
 
 if defined?(Bundler)
   # If you precompile assets before deploying to production, use this line
