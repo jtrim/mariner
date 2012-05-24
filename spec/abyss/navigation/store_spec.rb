@@ -26,33 +26,6 @@ module Abyss
 
       end
 
-      describe "#defaults" do
-
-        it "evaluates the block against its class" do
-          Store.should_receive(:foo)
-          subject.defaults { foo }
-        end
-
-      end
-
-      describe "#group" do
-
-        it "forwards the group on to method_missing" do
-          expected_block = proc {}
-          subject.should_receive(:method_missing).with(:foo, [], &expected_block).and_return stub.as_null_object
-          subject.group(:foo) &expected_block
-        end
-
-        it "sets #virtual of the newly created group to true" do
-          subject.tap {} # force evaluation since we stub new
-          store_mock = mock
-          store_mock.should_receive(:virtual=).with(true)
-          Store.stub(:new).and_return store_mock
-          subject.group(:foo) {}
-        end
-
-      end
-
       describe "#assign" do
 
         context "by default" do
