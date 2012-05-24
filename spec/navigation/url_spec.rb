@@ -30,7 +30,8 @@ module Mariner
       end
 
       it "renders through a specified strategy when given" do
-        class FakeRenderingStrategy; end
+        class FakeRenderingStrategy #:nodoc:
+        end
         FakeRenderingStrategy.any_instance.stub(:factory).with(:item, subject).and_return(renderer_stub)
 
         renderer_stub.should_receive(:render)

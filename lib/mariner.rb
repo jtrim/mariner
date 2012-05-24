@@ -29,7 +29,8 @@ module Mariner
   #     Mariner.configure do
   #       an_arbitrary_group do
   #         root_path "Go Home"                                     #=> where `root_path` is a Rails route helper
-  #         users_path "Manage Users", { "data-name" => "go-home" } #=> note the optional attributes hash. This is used by rendering strategies
+  #         users_path "Manage Users", { "data-name" => "go-home" } #=> note the optional attributes hash. This
+  #                                                                 #   is used by rendering strategies
   #       end
   #     end
   #

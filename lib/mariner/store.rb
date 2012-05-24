@@ -2,8 +2,9 @@ require 'active_support/core_ext/string/inflections'
 
 module Mariner
 
-  # Public: Uses Abyss to provide arbitrarily-deep sets of navigation groups
-  # / urls. Think of this class like the group when defining navigations.
+  # Public: Uses the Abyss library to provide arbitrarily-deep sets of
+  # navigation groups / urls. Think of this as the group when
+  # defining nav trees.
   #
   # Examples:
   #
@@ -58,7 +59,6 @@ module Mariner
     # Public: Uses a rendering strategy to render itself.
     #
     # rendering_strategy - The rendering strategy to use when rendering.
-    #                      (default: ::Mariner::UnorderedListRenderer.new)
     #
     # Examples:
     #
