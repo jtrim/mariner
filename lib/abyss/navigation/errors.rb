@@ -2,6 +2,9 @@ module Abyss
 
   module Errors
 
+    # Private: This error is raised when Url tries to use a route helper
+    # method that's unavailable or undefined
+    #
     class InvalidUrlHelperMethod < RuntimeError
       attr_accessor :name
 
