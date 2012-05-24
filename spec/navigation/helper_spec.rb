@@ -97,6 +97,35 @@ module Mariner
 
     end
 
+    describe "#render_navigations" do
+
+      before do
+        Mariner.configure do
+          root_path "Top"
+
+          group_one do
+            root_path "One"
+          end
+
+          group_two do
+            root_path "Two"
+          end
+        end
+      end
+
+      it "renders the navigations within the target group without rendering the target itself" do
+        Mariner.configuration.should_not_receive(:render)
+
+        Mariner.configuration.configurations.each do |c|
+          _, entity = c
+          entity.should_receive(:render)
+        end
+
+        render_navigations
+      end
+
+    end
+
   end
 
 end

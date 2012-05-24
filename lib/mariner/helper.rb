@@ -42,18 +42,53 @@ module Mariner
     #     #=> renders `a_group` with a FakeRenderingStrategy instance
     #
     def render_navigation(config_path=nil, renderer=nil)
-      path   = config_path ? config_path.to_s.split("/") : []
-      target = path.reduce(Mariner.configuration) { |acc, g| acc.send g }
+      target   = target_from_path(config_path)
+      strategy = rendering_strategy_from(renderer)
 
-      if renderer && renderer.respond_to?(:render)
-        target.render(renderer)
-      elsif renderer && Mariner.rendering_strategies[renderer].nil?
-        raise "Rendering strategy not found: #{renderer}"
-      elsif renderer
-        target.render(Mariner.rendering_strategies[renderer])
-      else
-        target.render
-      end
+      strategy ? target.render(strategy) : target.render
+    end
+
+    # Public: For when you want to render all the configurations under
+    # a given group but you don't want to render the group itself.
+    #
+    # Examples:
+    #
+    #     Mariner.configure do
+    #       group_a do
+    #         root_path "Home"
+    #       end
+    #
+    #       group_b do
+    #         users_path "Manage Users"
+    #       end
+    #     end
+    #
+    #     render_navigations
+    #     #=> renders the group_a and group_b trees and joins the result
+    #
+    def render_navigations(config_path=nil, renderer=nil)
+      target = target_from_path(config_path)
+      strategy = rendering_strategy_from(renderer)
+
+      target.configurations.map do |c|
+        _, entity = c
+        strategy ? entity.render(strategy) : entity.render
+      end.join
+    end
+
+    private
+
+    def target_from_path(config_path)
+      path   = config_path ? config_path.to_s.split("/") : []
+      path.reduce(Mariner.configuration) { |acc, g| acc.send g }
+    end
+
+    def rendering_strategy_from(renderer)
+      return nil unless renderer
+      return renderer if renderer && renderer.respond_to?(:render)
+      raise "Rendering strategy not found: #{renderer}" if Mariner.rendering_strategies[renderer].nil?
+
+      Mariner.rendering_strategies[renderer]
     end
 
   end

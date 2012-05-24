@@ -12,7 +12,7 @@ module Mariner
 
       ActiveSupport.on_load(:action_controller) do
         include Mariner::Helper
-        helper_method :render_navigation
+        helper_method :render_navigation, :render_navigations
       end
     end
 
