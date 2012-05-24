@@ -69,7 +69,7 @@ module Abyss
       #     Abyss::Navigation.configuration.render
       #     Abyss::Navigation.configuration.render(SomeRenderingStrategy.new)
       #
-      def render(rendering_strategy=UnorderedListRenderer.new)
+      def render(rendering_strategy=Navigation.rendering_strategies[:default])
         rendering_strategy.factory(:group, self).render
       end
 

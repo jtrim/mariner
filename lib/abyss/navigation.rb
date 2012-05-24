@@ -16,8 +16,12 @@ module Abyss
   module Navigation
 
     class << self
-      attr_accessor :configuration
+      attr_accessor :configuration, :rendering_strategies
     end
+
+    @rendering_strategies = {
+      :default => UnorderedListRenderer.new
+    }
 
     # Public interface to Navigation Navigation API
     # See NavigationConfig for examples.

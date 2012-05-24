@@ -32,7 +32,7 @@ module Abyss
       # rendering_strategy - The rendering strategy to use. Must respond to
       #                      #render (default: UnorderedListRenderer.new)
       #
-      def render(rendering_strategy=UnorderedListRenderer.new)
+      def render(rendering_strategy=Navigation.rendering_strategies[:default])
         rendering_strategy.factory(:item, self).render
       end
 
