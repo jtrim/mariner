@@ -41,6 +41,9 @@ module Mariner
     #     render_navigation :a_group, FakeRenderingStrategy.new
     #     #=> renders `a_group` with a FakeRenderingStrategy instance
     #
+    #     render_navigation :a_group, :other_strategy
+    #     #=> renders `a_group` with Mariner.rendering_strategies[:other_strategy]
+    #
     def render_navigation(config_path=nil, renderer=nil)
       target   = target_from_path(config_path)
       strategy = rendering_strategy_from(renderer)
