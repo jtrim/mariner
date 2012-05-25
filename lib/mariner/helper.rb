@@ -1,3 +1,5 @@
+require 'active_support/core_ext/array/extract_options'
+
 module Mariner
 
   # Public: Gets included in controllers (see the Railtie)
@@ -77,6 +79,38 @@ module Mariner
         _, entity = c
         strategy ? entity.render(strategy) : entity.render
       end.join
+    end
+
+    # Public: For when you want to render multiple specific nav trees
+    #
+    # *args - A comma separated list of groups to render. The last argument
+    # may be an options hash. Options:
+    #
+    # - :rendering_strategy - A symbol, class, or object to use for rendering.
+    # See #render_navigation for details.
+    #
+    # Examples:
+    #
+    #     Mariner.configure do
+    #       group_a do
+    #         root_path "Home"
+    #
+    #         sub_group do
+    #           products_path "Products"
+    #         end
+    #       end
+    #
+    #       group_b do
+    #         users_path "Manage Users"
+    #       end
+    #     end
+    #
+    #     render_navigations 'group_a/sub_group', :group_b
+    #     render_navigations :group_a, :group_b, :rendering_strategy => :different_strategy
+    #
+    def render_navigations(*args)
+      renderer = args.extract_options![:rendering_strategy]
+      args.map { |target_path| render_navigation(*[target_path, renderer].compact) }.join
     end
 
     private

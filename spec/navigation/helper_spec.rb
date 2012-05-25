@@ -126,6 +126,43 @@ module Mariner
 
     end
 
+    describe "#render_navigations" do
+
+      before do
+        Mariner.configure do
+          group_one {}
+          group_two do
+            sub_group {}
+          end
+          group_three {}
+        end
+
+      end
+
+      context "without rendering options" do
+
+        it "renders each navigation given" do
+          helper.should_receive(:render_navigation).with('group_two/sub_group').once.ordered
+          helper.should_receive(:render_navigation).with(:group_three).once.ordered
+
+          helper.render_navigations 'group_two/sub_group', :group_three
+        end
+
+      end
+
+      context "with rendering options" do
+
+        it "renders each navigation with the specified renderer" do
+          helper.should_receive(:render_navigation).with('group_two/sub_group', :default).once.ordered
+          helper.should_receive(:render_navigation).with(:group_three, :default).once.ordered
+
+          helper.render_navigations 'group_two/sub_group', :group_three, :rendering_strategy => :default
+        end
+
+      end
+
+    end
+
   end
 
 end
