@@ -97,7 +97,7 @@ module Mariner
 
     end
 
-    describe "#render_navigations" do
+    describe "#render_sub_navigations" do
 
       before do
         Mariner.configure do
@@ -121,7 +121,7 @@ module Mariner
           entity.should_receive(:render)
         end
 
-        render_navigations
+        render_sub_navigations
       end
 
     end

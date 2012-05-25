@@ -66,10 +66,10 @@ module Mariner
     #       end
     #     end
     #
-    #     render_navigations
+    #     render_sub_navigations
     #     #=> renders the group_a and group_b trees and joins the result
     #
-    def render_navigations(config_path=nil, renderer=nil)
+    def render_sub_navigations(config_path=nil, renderer=nil)
       target = target_from_path(config_path)
       strategy = rendering_strategy_from(renderer)
 
