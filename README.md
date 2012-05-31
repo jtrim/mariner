@@ -48,7 +48,8 @@ After creating your nav, render it in your views with:
 
     <%= render_navigation :topbar %>
 
-See Mariner::Helper for usage on `render_navigation`.
+See Mariner::Helper for usage on `#render_navigation`. See also
+`#render_navigations` and `#render_sub_navigations`.
 
 ## Contributing
 
